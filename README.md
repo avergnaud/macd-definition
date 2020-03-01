@@ -13,5 +13,7 @@ pg_ctl -D /usr/local/var/postgres start
 
 http://localhost:8080/macddefinition
 
-curl -i -H "Content-Type:application/json" -d '{"exchange": "Kraken", "tradingPair": "XETHZEUR", "timeFrameInterval":"240", "shortPeriodEma":"12", "longPeriodEma":"26", "macdEma":"9"}' http://localhost:8080/macddefinition
+curl -i -H "Content-Type:application/json" -d @create_utilisateur.json http://localhost:8080/utilisateurEntity
+curl -i -H "Content-Type:application/json" -d @create_macd_definition.json http://localhost:8080/macddefinition
+curl -i -X PUT -H "Content-Type:text/uri-list" --data-binary @create_association.txt http://localhost:8080/utilisateurEntity/1/macdDefinitionEntities
 

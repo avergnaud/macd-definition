@@ -1,0 +1,10 @@
+{
+  "chart" : {
+    "exchange" : "Kraken",
+    "tradingPair" : "XETHZEUR",
+    "timeFrameInterval" : 240
+  },
+  "shortPeriodEma" : 12,
+  "longPeriodEma" : 26,
+  "macdEma" : 8
+}

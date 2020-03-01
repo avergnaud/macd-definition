@@ -1,12 +1,18 @@
-package com.poc.macddefinition;
+package com.poc.macddefinition.persistence.chart;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Table(
+        name = "chart",
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"exchange", "tradingPair", "timeFrameInterval"})
+)
 @Entity
-public class MacdDefinition {
+@NamedQueries({
+        @NamedQuery(name="ChartEntity.getAll", query = "SELECT c from ChartEntity c"),
+        @NamedQuery(name="ChartEntity.count", query = "SELECT count(c) from ChartEntity c")
+})
+public class ChartEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,19 +21,15 @@ public class MacdDefinition {
     private String exchange;
     private String tradingPair;
     private int timeFrameInterval;
-    private int shortPeriodEma;
-    private int longPeriodEma;
-    private int macdEma;
+    private long lastClosingTimeEpochTimestamp;
 
     @Override
     public String toString() {
-        return "MacdDefinition{" +
-                "exchange='" + exchange + '\'' +
+        return "Chart{" +
+                "id=" + id +
+                ", exchange='" + exchange + '\'' +
                 ", tradingPair='" + tradingPair + '\'' +
                 ", timeFrameInterval=" + timeFrameInterval +
-                ", shortPeriodEma=" + shortPeriodEma +
-                ", longPeriodEma=" + longPeriodEma +
-                ", macdEma=" + macdEma +
                 '}';
     }
 
@@ -63,27 +65,11 @@ public class MacdDefinition {
         this.timeFrameInterval = timeFrameInterval;
     }
 
-    public int getShortPeriodEma() {
-        return shortPeriodEma;
+    public long getLastClosingTimeEpochTimestamp() {
+        return lastClosingTimeEpochTimestamp;
     }
 
-    public void setShortPeriodEma(int shortPeriodEma) {
-        this.shortPeriodEma = shortPeriodEma;
-    }
-
-    public int getLongPeriodEma() {
-        return longPeriodEma;
-    }
-
-    public void setLongPeriodEma(int longPeriodEma) {
-        this.longPeriodEma = longPeriodEma;
-    }
-
-    public int getMacdEma() {
-        return macdEma;
-    }
-
-    public void setMacdEma(int macdEma) {
-        this.macdEma = macdEma;
+    public void setLastClosingTimeEpochTimestamp(long lastClosingTimeEpochTimestamp) {
+        this.lastClosingTimeEpochTimestamp = lastClosingTimeEpochTimestamp;
     }
 }
