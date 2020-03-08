@@ -6,7 +6,21 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "macd")
+@NamedQueries({
+        @NamedQuery(name="MacdEntity.findOne", query = "SELECT m from MacdEntity m" +
+                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " and m.timeEpochTimestamp = :timeEpochTimestamp"),
+        @NamedQuery(name="MacdEntity.getLast", query = "SELECT m from MacdEntity m" +
+                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " order by m.timeEpochTimestamp desc"),
+        @NamedQuery(name="MacdEntity.getNLastBefore", query = "SELECT m from MacdEntity m" +
+                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " and m.timeEpochTimestamp <= :timeEpochTimestamp" +
+                " order by m.timeEpochTimestamp desc")
+})
+@Table(name = "macd", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"macd_definition_id","time_epoch_timestamp"})
+})
 public class MacdEntity {
 
     @Id

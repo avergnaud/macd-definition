@@ -50,39 +50,48 @@ public class MACDUpdater {
     @Scheduled(fixedDelay = 20_000)
     public void updateMacds() {
 
-        if(this.macdDefinitionEntities.isEmpty()) {
+        if (this.macdDefinitionEntities.isEmpty()) {
             fillMacdDefinitions();
             return;
         }
         final MacdDefinitionEntity macdDef = this.macdDefinitionEntities.pop();
 
         final List<OHLCEntity> ohlcs = this.ohlcRepository.getAll(macdDef.getChart());
-        if(ohlcs == null || ohlcs.size() == 0) {
+        if (ohlcs == null || ohlcs.size() == 0) {
             log.info("no OHLC data found for chart " + macdDef.getChart()
-                + ". Retrying later...");
+                    + ". Retrying later...");
             return;
         }
         int minRequired = macdDef.getLongPeriodEma() + macdDef.getMacdEma();
-        if(ohlcs.size() < minRequired) {
+        if (ohlcs.size() < minRequired) {
             log.info("not enough OHLC data (" + ohlcs.size() + ") to calculate MACD " + macdDef.toString());
             return;
         }
 
-        if(macdDef.getChart().getLastMACDTimeEpochTimestamp() == 0) {
+        MacdEntity lastMacd = null;
+        if (macdDef.getChart().getLastMACDTimeEpochTimestamp() == 0) {
             /* cas initial */
-            SortedMap<Integer,MacdEntity> macds = this.macdCalculator.getInitialMacds(macdDef, ohlcs);
+            SortedMap<Integer, MacdEntity> macds = this.macdCalculator.getInitialMacds(macdDef, ohlcs);
             this.macdRepository.create(macds.values());
-
-            MacdEntity lastMacd = macds.get(macds.lastKey());
-            final ChartEntity chartEntity = this.chartRepository.get(
-                    macdDef.getChart().getId()
-            );
-            chartEntity.setLastMACDTimeEpochTimestamp(lastMacd.getTimeEpochTimestamp());
-            this.chartRepository.update(chartEntity);
-
+            lastMacd = macds.get(macds.lastKey());
         } else {
             /* cas suivants */
+            lastMacd = this.macdRepository.getLast(macdDef);
+            List<OHLCEntity> ohlcEntities = this.ohlcRepository.getFrom(macdDef.getChart(), lastMacd.getTimeEpochTimestamp());
+            for (OHLCEntity ohlc : ohlcEntities) {
+                List<MacdEntity> lastMacds = this.macdRepository.getNLastBefore(
+                        macdDef,
+                        ohlc.getTimeEpochTimestamp(),
+                        macdDef.getMacdEma() - 1
+                );
+                lastMacd = this.macdCalculator.getMacd(macdDef, ohlc, lastMacds);
+                this.macdRepository.upsert(lastMacd);
+            }
         }
-
+        final ChartEntity chartEntity = this.chartRepository.get(
+                macdDef.getChart().getId()
+        );
+        chartEntity.setLastMACDTimeEpochTimestamp(lastMacd.getTimeEpochTimestamp());
+        this.chartRepository.update(chartEntity);
     }
 }

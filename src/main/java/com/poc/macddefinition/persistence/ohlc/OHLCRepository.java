@@ -25,11 +25,20 @@ public class OHLCRepository {
         return entityManager.find(OHLCEntity.class, id);
     }
 
-    public List<OHLCEntity> getLast(ChartEntity chartEntity) {
+    public OHLCEntity getLastLocked(ChartEntity chartEntity) {
 
-        return entityManager.createNamedQuery("OHLCEntity.findOne")
+        List<OHLCEntity> ohlcEntities = entityManager.createNamedQuery("OHLCEntity.findOne")
                 .setParameter("chartEntity", chartEntity)
                 .setParameter("timeEpochTimestamp", chartEntity.getLastOHLCTimeEpochTimestamp())
+                .getResultList();
+
+        return ohlcEntities.get(0);
+    }
+
+    public List<OHLCEntity> getFrom(ChartEntity chartEntity, long from) {
+        return entityManager.createNamedQuery("OHLCEntity.getFrom")
+                .setParameter("chartEntity", chartEntity)
+                .setParameter("start", from)
                 .getResultList();
     }
 

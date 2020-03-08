@@ -10,6 +10,10 @@ import java.math.BigDecimal;
         @NamedQuery(name="OHLCEntity.findOne", query = "SELECT o from OHLCEntity o" +
                 " where o.chartEntity = :chartEntity" +
                 " and o.timeEpochTimestamp = :timeEpochTimestamp"),
+        @NamedQuery(name="OHLCEntity.getFrom", query = "SELECT o from OHLCEntity o" +
+                " where o.chartEntity = :chartEntity" +
+                " and o.timeEpochTimestamp >= :start" +
+                " order by o.timeEpochTimestamp"),
         @NamedQuery(name="OHLCEntity.getAll", query = "SELECT o from OHLCEntity o" +
                 " where o.chartEntity = :chartEntity")
 })
