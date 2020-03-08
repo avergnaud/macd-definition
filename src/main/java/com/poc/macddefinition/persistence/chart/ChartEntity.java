@@ -21,7 +21,8 @@ public class ChartEntity {
     private String exchange;
     private String tradingPair;
     private int timeFrameInterval;
-    private long lastClosingTimeEpochTimestamp;
+    private long lastOHLCTimeEpochTimestamp;
+    private long lastMACDTimeEpochTimestamp;
 
     @Override
     public String toString() {
@@ -65,11 +66,19 @@ public class ChartEntity {
         this.timeFrameInterval = timeFrameInterval;
     }
 
-    public long getLastClosingTimeEpochTimestamp() {
-        return lastClosingTimeEpochTimestamp;
+    public long getLastOHLCTimeEpochTimestamp() {
+        return lastOHLCTimeEpochTimestamp;
     }
 
-    public void setLastClosingTimeEpochTimestamp(long lastClosingTimeEpochTimestamp) {
-        this.lastClosingTimeEpochTimestamp = lastClosingTimeEpochTimestamp;
+    public void setLastOHLCTimeEpochTimestamp(long lastOHLCTimeEpochTimestamp) {
+        this.lastOHLCTimeEpochTimestamp = lastOHLCTimeEpochTimestamp;
+    }
+
+    public long getLastMACDTimeEpochTimestamp() {
+        return lastMACDTimeEpochTimestamp;
+    }
+
+    public void setLastMACDTimeEpochTimestamp(long lastMACDTimeEpochTimestamp) {
+        this.lastMACDTimeEpochTimestamp = lastMACDTimeEpochTimestamp;
     }
 }

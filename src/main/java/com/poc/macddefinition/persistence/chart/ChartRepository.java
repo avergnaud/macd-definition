@@ -3,7 +3,6 @@ package com.poc.macddefinition.persistence.chart;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NamedQueries;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;

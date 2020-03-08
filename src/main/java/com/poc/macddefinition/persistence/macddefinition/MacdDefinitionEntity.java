@@ -8,20 +8,35 @@ import java.util.Set;
 
 @Entity
 @Table(name = "macd_definition")
+@NamedQueries({
+        @NamedQuery(name="MacdDefinitionEntity.getAll", query = "SELECT m from MacdDefinitionEntity m")
+})
 public class MacdDefinitionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ChartEntity chart;
     private int shortPeriodEma;
     private int longPeriodEma;
     private int macdEma;
 
-    @ManyToMany(mappedBy="macdDefinitions")
+    @ManyToMany(mappedBy="macdDefinitions", fetch = FetchType.EAGER)
     private Set<UtilisateurEntity> utilisateurs;
+
+    @Override
+    public String toString() {
+        return "MacdDefinitionEntity{" +
+                "id=" + id +
+                ", chart=" + chart +
+                ", shortPeriodEma=" + shortPeriodEma +
+                ", longPeriodEma=" + longPeriodEma +
+                ", macdEma=" + macdEma +
+                ", utilisateurs=" + utilisateurs +
+                '}';
+    }
 
     public Set<UtilisateurEntity> getUtilisateurs() {
         return utilisateurs;

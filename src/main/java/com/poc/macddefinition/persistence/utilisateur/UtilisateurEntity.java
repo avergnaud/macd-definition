@@ -14,7 +14,7 @@ public class UtilisateurEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<MacdDefinitionEntity> macdDefinitions;
 
     private String wirePusherId;

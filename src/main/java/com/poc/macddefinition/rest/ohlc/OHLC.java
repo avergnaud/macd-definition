@@ -8,7 +8,7 @@ public class OHLC {
 
     private Long id;
     private Chart chartEntity;
-    private long closingTimeEpochTimestamp;
+    private long timeEpochTimestamp;
     private BigDecimal openingPrice;
     private BigDecimal highPrice;
     private BigDecimal lowPrice;
@@ -30,12 +30,12 @@ public class OHLC {
         this.chartEntity = chartEntity;
     }
 
-    public long getClosingTimeEpochTimestamp() {
-        return closingTimeEpochTimestamp;
+    public long getTimeEpochTimestamp() {
+        return timeEpochTimestamp;
     }
 
-    public void setClosingTimeEpochTimestamp(long closingTimeEpochTimestamp) {
-        this.closingTimeEpochTimestamp = closingTimeEpochTimestamp;
+    public void setTimeEpochTimestamp(long timeEpochTimestamp) {
+        this.timeEpochTimestamp = timeEpochTimestamp;
     }
 
     public BigDecimal getOpeningPrice() {

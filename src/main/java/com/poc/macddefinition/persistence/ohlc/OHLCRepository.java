@@ -1,5 +1,6 @@
 package com.poc.macddefinition.persistence.ohlc;
 
+import com.poc.macddefinition.persistence.chart.ChartEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,20 @@ public class OHLCRepository {
         return entityManager.find(OHLCEntity.class, id);
     }
 
+    public List<OHLCEntity> getLast(ChartEntity chartEntity) {
+
+        return entityManager.createNamedQuery("OHLCEntity.findOne")
+                .setParameter("chartEntity", chartEntity)
+                .setParameter("timeEpochTimestamp", chartEntity.getLastOHLCTimeEpochTimestamp())
+                .getResultList();
+    }
+
+    public List<OHLCEntity> getAll(ChartEntity chartEntity) {
+        return entityManager.createNamedQuery("OHLCEntity.getAll")
+                .setParameter("chartEntity", chartEntity)
+                .getResultList();
+    }
+
     /**
      * update or create
      * @param newOhlcEntity
@@ -32,12 +47,12 @@ public class OHLCRepository {
     public OHLCEntity upsert(OHLCEntity newOhlcEntity) {
 
         /*
-        UNIQUE INDEX ... ON public.ohlc USING btree (chart_entity_id, closing_time_epoch_timestamp)
-        limited calls due to &since=ChartEntity.lastClosingTimeEpochTimestamp
+        UNIQUE INDEX ... ON public.ohlc USING btree (chart_entity_id, time_epoch_timestamp)
+        limited calls due to &since=ChartEntity.timeEpochTimestamp
          */
         List<OHLCEntity> existings = entityManager.createNamedQuery("OHLCEntity.findOne")
                 .setParameter("chartEntity", newOhlcEntity.getChartEntity())
-                .setParameter("closingTimeEpochTimestamp", newOhlcEntity.getClosingTimeEpochTimestamp())
+                .setParameter("timeEpochTimestamp", newOhlcEntity.getTimeEpochTimestamp())
                 .getResultList();
 
         if(existings.size() > 0) {

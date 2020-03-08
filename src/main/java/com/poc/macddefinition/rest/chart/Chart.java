@@ -6,7 +6,7 @@ public class Chart {
     private String exchange;
     private String tradingPair;
     private int timeFrameInterval;
-    private long lastClosingTimeEpochTimestamp;
+    private long lastTimeEpochTimestamp;
 
     public Long getId() {
         return id;
@@ -40,11 +40,11 @@ public class Chart {
         this.timeFrameInterval = timeFrameInterval;
     }
 
-    public long getLastClosingTimeEpochTimestamp() {
-        return lastClosingTimeEpochTimestamp;
+    public long getLastTimeEpochTimestamp() {
+        return lastTimeEpochTimestamp;
     }
 
-    public void setLastClosingTimeEpochTimestamp(long lastClosingTimeEpochTimestamp) {
-        this.lastClosingTimeEpochTimestamp = lastClosingTimeEpochTimestamp;
+    public void setLastTimeEpochTimestamp(long lastTimeEpochTimestamp) {
+        this.lastTimeEpochTimestamp = lastTimeEpochTimestamp;
     }
 }

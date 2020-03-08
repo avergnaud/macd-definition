@@ -9,10 +9,12 @@ import java.math.BigDecimal;
 @NamedQueries({
         @NamedQuery(name="OHLCEntity.findOne", query = "SELECT o from OHLCEntity o" +
                 " where o.chartEntity = :chartEntity" +
-                " and o.closingTimeEpochTimestamp = :closingTimeEpochTimestamp")
+                " and o.timeEpochTimestamp = :timeEpochTimestamp"),
+        @NamedQuery(name="OHLCEntity.getAll", query = "SELECT o from OHLCEntity o" +
+                " where o.chartEntity = :chartEntity")
 })
 @Table(name = "ohlc", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"chart_entity_id","closing_time_epoch_timestamp"})
+        @UniqueConstraint(columnNames = {"chart_entity_id","time_epoch_timestamp"})
 })
 public class OHLCEntity {
 
@@ -24,8 +26,8 @@ public class OHLCEntity {
     @JoinColumn(name = "chart_entity_id")
     private ChartEntity chartEntity;
 
-    @Column(name = "closing_time_epoch_timestamp")
-    private long closingTimeEpochTimestamp;
+    @Column(name = "time_epoch_timestamp")
+    private long timeEpochTimestamp;
 
     private BigDecimal openingPrice;
     private BigDecimal highPrice;
@@ -37,7 +39,7 @@ public class OHLCEntity {
         return "OHLC{" +
                 "id=" + id +
                 ", chart=" + chartEntity +
-                ", closingTimeEpochTimestamp=" + closingTimeEpochTimestamp +
+                ", timeEpochTimestamp=" + timeEpochTimestamp +
                 ", openingPrice=" + openingPrice +
                 ", highPrice=" + highPrice +
                 ", lowPrice=" + lowPrice +
@@ -61,12 +63,12 @@ public class OHLCEntity {
         this.chartEntity = chartEntity;
     }
 
-    public long getClosingTimeEpochTimestamp() {
-        return closingTimeEpochTimestamp;
+    public long getTimeEpochTimestamp() {
+        return timeEpochTimestamp;
     }
 
-    public void setClosingTimeEpochTimestamp(long closingTimeEpochTimestamp) {
-        this.closingTimeEpochTimestamp = closingTimeEpochTimestamp;
+    public void setTimeEpochTimestamp(long timeEpochTimestamp) {
+        this.timeEpochTimestamp = timeEpochTimestamp;
     }
 
     public BigDecimal getOpeningPrice() {

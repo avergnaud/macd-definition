@@ -2,6 +2,7 @@ package com.poc.macddefinition;
 
 import com.poc.macddefinition.kraken.TradingPairs;
 import com.poc.macddefinition.kraken.service.KrakenService;
+import com.poc.macddefinition.macd.MacdCalculator;
 import com.poc.macddefinition.persistence.chart.ChartEntity;
 import com.poc.macddefinition.persistence.chart.ChartRepository;
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
@@ -63,6 +64,11 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 		return tradingPairs;
 	}
 
+	@Bean
+	public MacdCalculator getMacdCalculator() {
+		return new MacdCalculator();
+	}
+
 	/**
 	 * temporaire pour test ?
 	 * @param args
@@ -71,46 +77,6 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 	public void run(String... args) {
 
 		log.info("StartApplication...");
-
-		/*
-		String pair = "XETHZEUR";
-		if(!tradingPairs.getValues().contains(pair)) {
-			return;
-		}
-		//1
-		ChartEntity chartEntity = new ChartEntity();
-		chartEntity.setExchange("Kraken");
-		chartEntity.setTradingPair(pair);
-		chartEntity.setTimeFrameInterval(Intervals.ONE_HOUR.getMinutes());
-		chartRepository.create(chartEntity);
-		//2
-		chartEntity = new ChartEntity();
-		chartEntity.setExchange("Kraken");
-		chartEntity.setTradingPair(pair);
-		chartEntity.setTimeFrameInterval(Intervals.ONE_DAY.getMinutes());
-		chartRepository.create(chartEntity);
-		//3
-		chartEntity = new ChartEntity();
-		chartEntity.setExchange("Kraken");
-		chartEntity.setTradingPair(pair);
-		chartEntity.setTimeFrameInterval(Intervals.FOUR_HOURS.getMinutes());
-		chartRepository.create(chartEntity);
-
-		MacdDefinitionEntity macdDefinitionEntity = new MacdDefinitionEntity();
-		macdDefinitionEntity.setShortPeriodEma(12);
-		macdDefinitionEntity.setLongPeriodEma(26);
-		macdDefinitionEntity.setMacdEma(9);
-		macdDefinitionEntity.setChart(chartEntity);
-		macdDefinitionRepository.create(macdDefinitionEntity);
-
-		UtilisateurEntity utilisateurEntity = new UtilisateurEntity();
-		utilisateurEntity.setEmail("a.vergnaud@gmail.com");
-		utilisateurEntity.setWirePusherId("bpfxmpnbJ");
-		Set<MacdDefinitionEntity> macdDefinitionEntities = new HashSet<>();
-		macdDefinitionEntities.add(macdDefinitionEntity);
-		utilisateurEntity.setMacdDefinitions(macdDefinitionEntities);
-		utilisateurRepository.create(utilisateurEntity);
-		*/
 	}
 
 	public static void main(String[] args) {

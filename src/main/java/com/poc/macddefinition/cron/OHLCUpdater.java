@@ -17,7 +17,6 @@
 package com.poc.macddefinition.cron;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.net.URI;
 import java.util.Stack;
 import java.util.function.Function;
@@ -25,6 +24,8 @@ import java.util.function.Function;
 import com.poc.macddefinition.persistence.chart.ChartEntity;
 import com.poc.macddefinition.persistence.chart.ChartRepository;
 import com.poc.macddefinition.kraken.service.KrakenService;
+import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
+import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionRepository;
 import com.poc.macddefinition.persistence.ohlc.OHLCEntity;
 import com.poc.macddefinition.persistence.ohlc.OHLCRepository;
 import org.json.JSONArray;
@@ -42,26 +43,26 @@ public class OHLCUpdater {
 
     private static final Logger log = LoggerFactory.getLogger(OHLCUpdater.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
     @Autowired
     private KrakenService krakenService;
 
     @Autowired
     private OHLCRepository ohlcRepository;
 
+    @Autowired
     private ChartRepository chartRepository;
 
-    private Stack<ChartEntity> chartEntities;
+    private MacdDefinitionRepository macdDefinitionRepository;
+    private Stack<MacdDefinitionEntity> macdDefinitionEntities;
 
-    public OHLCUpdater(@Autowired ChartRepository chartRepository) {
-        this.chartRepository = chartRepository;
-        fillChartEntities();
+    public OHLCUpdater(@Autowired MacdDefinitionRepository macdDefinitionRepository) {
+        this.macdDefinitionRepository = macdDefinitionRepository;
+        fillMacdDefinitions();
     }
 
-    private void fillChartEntities() {
-        this.chartEntities = new Stack();
-        this.chartEntities.addAll(chartRepository.getAll());
+    private void fillMacdDefinitions() {
+        this.macdDefinitionEntities = new Stack();
+        this.macdDefinitionEntities.addAll(macdDefinitionRepository.getAll());
     }
 
     /**
@@ -70,23 +71,24 @@ public class OHLCUpdater {
     @Scheduled(fixedDelay = 20_000)
     public void callKraken() {
 
-        if(this.chartEntities.isEmpty()) {
-            fillChartEntities();
+        if(this.macdDefinitionEntities.isEmpty()) {
+            fillMacdDefinitions();
             return;
         }
-        final ChartEntity chartEntity = this.chartEntities.pop();
+        final MacdDefinitionEntity macdDefinitionEntity = this.macdDefinitionEntities.pop();
+        final ChartEntity chartEntity = macdDefinitionEntity.getChart();
 
         Function<UriBuilder, URI> uri = uriBuilder -> uriBuilder.path("/OHLC")
                 .queryParam("pair", chartEntity.getTradingPair())
                 .queryParam("interval", chartEntity.getTimeFrameInterval())
-                .queryParam("since", chartEntity.getLastClosingTimeEpochTimestamp())
+                .queryParam("since", chartEntity.getLastOHLCTimeEpochTimestamp())
                 .build();
 
         Mono<JSONObject> krakenOhlcsMono = krakenService.queryPublicAPI(uri);
-        krakenOhlcsMono.subscribe(krakenOHLC -> handle(chartEntity, krakenOHLC));
+        krakenOhlcsMono.subscribe(krakenOHLC -> handle(macdDefinitionEntity, krakenOHLC));
     }
 
-    private void handle(final ChartEntity chartEntity, JSONObject krakenOHLC) {
+    private void handle(final MacdDefinitionEntity macdDefinitionEntity, JSONObject krakenOHLC) {
 
         /* {"error":["EAPI:Rate limit exceeded"]} */
         if(krakenOHLC.getJSONArray("error").length() != 0) {
@@ -96,7 +98,11 @@ public class OHLCUpdater {
 
         JSONObject result = krakenOHLC.getJSONObject("result");
         long last = result.getLong("last");
-        chartEntity.setLastClosingTimeEpochTimestamp(last);
+
+        final ChartEntity chartEntity = this.chartRepository.get(
+                macdDefinitionEntity.getChart().getId()
+        );
+        chartEntity.setLastOHLCTimeEpochTimestamp(last);
         this.chartRepository.update(chartEntity);
 
         JSONArray ohlcArray = result.getJSONArray(chartEntity.getTradingPair());
@@ -105,7 +111,7 @@ public class OHLCUpdater {
             JSONArray ohlc = (JSONArray)ohlcArray.get(i);
             OHLCEntity ohlcEntity = new OHLCEntity();
             ohlcEntity.setChartEntity(chartEntity);
-            ohlcEntity.setClosingTimeEpochTimestamp(ohlc.getLong(0));
+            ohlcEntity.setTimeEpochTimestamp(ohlc.getLong(0));
             String open = ohlc.getString(1);
             ohlcEntity.setOpeningPrice(new BigDecimal(open));
             String high = ohlc.getString(2);
