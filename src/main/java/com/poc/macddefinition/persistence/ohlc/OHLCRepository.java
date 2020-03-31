@@ -42,6 +42,19 @@ public class OHLCRepository {
                 .getResultList();
     }
 
+    public List<OHLCEntity> getByChartEntityId(long chartEntityId, int last) {
+        return entityManager.createNamedQuery("OHLCEntity.getByChartId", OHLCEntity.class)
+                .setParameter("chartId", chartEntityId)
+                .setMaxResults(last)
+                .getResultList();
+    }
+
+    public List<OHLCEntity> getByChartEntityId(long chartEntityId) {
+        return entityManager.createNamedQuery("OHLCEntity.getByChartId", OHLCEntity.class)
+                .setParameter("chartId", chartEntityId)
+                .getResultList();
+    }
+
     public List<OHLCEntity> getAll(ChartEntity chartEntity) {
         return entityManager.createNamedQuery("OHLCEntity.getAll")
                 .setParameter("chartEntity", chartEntity)

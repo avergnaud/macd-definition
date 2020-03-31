@@ -1,7 +1,6 @@
-package com.poc.macddefinition.macd;
+package com.poc.macddefinition.persistence.macd;
 
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
-import com.poc.macddefinition.rest.macddefinition.MacdDefinition;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,6 +16,24 @@ public class MacdRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public List<MacdEntity> getAll() {
+        return entityManager.createNamedQuery("MacdEntity.getAll", MacdEntity.class)
+                .getResultList();
+    }
+
+    public List<MacdEntity> getByDefinitionId(Long macdDefinitionId) {
+        return entityManager.createNamedQuery("MacdEntity.getByDefinition", MacdEntity.class)
+                .setParameter("macdDefinitionId", macdDefinitionId)
+                .getResultList();
+    }
+
+    public List<MacdEntity> getByDefinitionId(Long macdDefinitionId, int last) {
+        return entityManager.createNamedQuery("MacdEntity.getByDefinition", MacdEntity.class)
+                .setParameter("macdDefinitionId", macdDefinitionId)
+                .setMaxResults(last)
+                .getResultList();
+    }
 
     public MacdEntity getLast(MacdDefinitionEntity macdDef) {
 
@@ -65,7 +82,7 @@ public class MacdRepository {
         UNIQUE INDEX ... ON public.macd USING btree (macd_definition_id, time_epoch_timestamp)
          */
         List<MacdEntity> existing = entityManager.createNamedQuery("MacdEntity.findOne")
-                .setParameter("macdDefinitionEntity", newMacdEntity.getMacdDefinitionEntity())
+                .setParameter("macdDefinitionEntity", newMacdEntity.getMacdDefinition())
                 .setParameter("timeEpochTimestamp", newMacdEntity.getTimeEpochTimestamp())
                 .getResultList();
 

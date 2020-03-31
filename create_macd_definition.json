@@ -2,7 +2,7 @@
   "chart" : {
     "exchange" : "Kraken",
     "tradingPair" : "XETHZEUR",
-    "timeFrameInterval" : 240
+    "timeFrameInterval" : 1440
   },
   "shortPeriodEma" : 12,
   "longPeriodEma" : 26,

@@ -2,15 +2,10 @@ package com.poc.macddefinition;
 
 import com.poc.macddefinition.kraken.TradingPairs;
 import com.poc.macddefinition.kraken.service.KrakenService;
-import com.poc.macddefinition.macd.MacdCalculator;
-import com.poc.macddefinition.persistence.chart.ChartEntity;
+import com.poc.macddefinition.persistence.macd.MacdCalculator;
 import com.poc.macddefinition.persistence.chart.ChartRepository;
-import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionRepository;
-import com.poc.macddefinition.persistence.utilisateur.UtilisateurEntity;
 import com.poc.macddefinition.persistence.utilisateur.UtilisateurRepository;
-import com.poc.macddefinition.kraken.Intervals;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +15,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Function;
 
 @SpringBootApplication
@@ -67,6 +62,16 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 	@Bean
 	public MacdCalculator getMacdCalculator() {
 		return new MacdCalculator();
+	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+			}
+		};
 	}
 
 	/**

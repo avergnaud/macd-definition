@@ -1,4 +1,4 @@
-package com.poc.macddefinition.macd;
+package com.poc.macddefinition.persistence.macd;
 
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
 
@@ -7,14 +7,19 @@ import java.math.BigDecimal;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name="MacdEntity.getAll", query = "SELECT m from MacdEntity m"),
+        @NamedQuery(name="MacdEntity.getByDefinition", query = "SELECT m from MacdEntity m" +
+                " left join m.macdDefinition d" +
+                " where d.id = :macdDefinitionId" +
+                " order by m.timeEpochTimestamp desc"),
         @NamedQuery(name="MacdEntity.findOne", query = "SELECT m from MacdEntity m" +
-                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " where m.macdDefinition = :macdDefinitionEntity" +
                 " and m.timeEpochTimestamp = :timeEpochTimestamp"),
         @NamedQuery(name="MacdEntity.getLast", query = "SELECT m from MacdEntity m" +
-                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " where m.macdDefinition = :macdDefinitionEntity" +
                 " order by m.timeEpochTimestamp desc"),
         @NamedQuery(name="MacdEntity.getNLastBefore", query = "SELECT m from MacdEntity m" +
-                " where m.macdDefinitionEntity = :macdDefinitionEntity" +
+                " where m.macdDefinition = :macdDefinitionEntity" +
                 " and m.timeEpochTimestamp <= :timeEpochTimestamp" +
                 " order by m.timeEpochTimestamp desc")
 })
@@ -29,7 +34,7 @@ public class MacdEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "macd_definition_id")
-    private MacdDefinitionEntity macdDefinitionEntity;
+    private MacdDefinitionEntity macdDefinition;
 
     @Column(name = "time_epoch_timestamp")
     private long timeEpochTimestamp;
@@ -48,12 +53,12 @@ public class MacdEntity {
         this.id = id;
     }
 
-    public MacdDefinitionEntity getMacdDefinitionEntity() {
-        return macdDefinitionEntity;
+    public MacdDefinitionEntity getMacdDefinition() {
+        return macdDefinition;
     }
 
-    public void setMacdDefinitionEntity(MacdDefinitionEntity macdDefinitionEntity) {
-        this.macdDefinitionEntity = macdDefinitionEntity;
+    public void setMacdDefinition(MacdDefinitionEntity macdDefinition) {
+        this.macdDefinition = macdDefinition;
     }
 
     public long getTimeEpochTimestamp() {

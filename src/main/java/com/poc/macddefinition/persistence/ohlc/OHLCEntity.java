@@ -15,7 +15,11 @@ import java.math.BigDecimal;
                 " and o.timeEpochTimestamp >= :start" +
                 " order by o.timeEpochTimestamp"),
         @NamedQuery(name="OHLCEntity.getAll", query = "SELECT o from OHLCEntity o" +
-                " where o.chartEntity = :chartEntity")
+                " where o.chartEntity = :chartEntity"),
+        @NamedQuery(name="OHLCEntity.getByChartId", query = "SELECT o from OHLCEntity o" +
+                " LEFT JOIN o.chartEntity c" +
+                " WHERE c.id = :chartId" +
+                " ORDER BY o.timeEpochTimestamp desc")
 })
 @Table(name = "ohlc", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"chart_entity_id","time_epoch_timestamp"})

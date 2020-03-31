@@ -1,4 +1,4 @@
-package com.poc.macddefinition.macd;
+package com.poc.macddefinition.persistence.macd;
 
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
 import com.poc.macddefinition.persistence.ohlc.OHLCEntity;
@@ -29,7 +29,7 @@ public class MacdCalculator {
         final BigDecimal K_SLOW = this.getKSlow(macdDef);
 
         MacdEntity macd = new MacdEntity();
-        macd.setMacdDefinitionEntity(macdDef);
+        macd.setMacdDefinition(macdDef);
         macd.setTimeEpochTimestamp(epochTimeStamp);
         macd.setClosingPrice(ohlc.getClosingPrice());
         /** shortEmaValue */
@@ -86,7 +86,7 @@ public class MacdCalculator {
             OHLCEntity ohlc = ohlcs.get(index);
             MacdEntity macd = new MacdEntity();
             MacdEntity previous = macds.get(index - 1);/*nulls not used*/
-            macd.setMacdDefinitionEntity(macdDef);
+            macd.setMacdDefinition(macdDef);
             macd.setTimeEpochTimestamp(ohlc.getTimeEpochTimestamp());
             macd.setClosingPrice(ohlc.getClosingPrice());
 
@@ -132,8 +132,9 @@ public class MacdCalculator {
             /** signalValue */
             if(index >= i3) {
                 List<MacdEntity> subList = new ArrayList(
-                        macds.subMap(index - macdDef.getMacdEma() + 1, index + 1).values()
+                        macds.subMap(index - macdDef.getMacdEma() + 1, index).values()
                 );
+                subList.add(macd);
                 BigDecimal signalValue = this.average(subList, MacdEntity::getMacdValue);
                 macd.setSignalValue(signalValue);
             }

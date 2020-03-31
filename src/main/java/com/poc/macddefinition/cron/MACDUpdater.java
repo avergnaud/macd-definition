@@ -1,8 +1,8 @@
 package com.poc.macddefinition.cron;
 
-import com.poc.macddefinition.macd.MacdCalculator;
-import com.poc.macddefinition.macd.MacdEntity;
-import com.poc.macddefinition.macd.MacdRepository;
+import com.poc.macddefinition.persistence.macd.MacdCalculator;
+import com.poc.macddefinition.persistence.macd.MacdEntity;
+import com.poc.macddefinition.persistence.macd.MacdRepository;
 import com.poc.macddefinition.persistence.chart.ChartEntity;
 import com.poc.macddefinition.persistence.chart.ChartRepository;
 import com.poc.macddefinition.persistence.macddefinition.MacdDefinitionEntity;
