@@ -69,7 +69,10 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/**")
+						.allowedOrigins("http://localhost:3000",
+								"http://localhost:5000",
+								"https://avergnaud.github.io");
 			}
 		};
 	}
