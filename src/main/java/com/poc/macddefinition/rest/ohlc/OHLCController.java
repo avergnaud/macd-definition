@@ -39,28 +39,4 @@ public class OHLCController {
                 .map(ohlcMapper::asOHLC)
                 .collect(Collectors.toList());
     }
-
-    @GetMapping(value = "/extract.csv")
-    public void fooAsCSV(HttpServletResponse response, @RequestParam Long chartEntityId) throws IOException {
-
-        List<OHLCEntity> liste = ohlcRepository.getByChartEntityId(chartEntityId);
-        StringBuilder sb = new StringBuilder();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        int index = 0;
-        for(int i=liste.size()-1; i>=0; i--) {
-            OHLCEntity ohlcEntity = liste.get(i);
-            java.util.Date time=new java.util.Date((long) ohlcEntity.getTimeEpochTimestamp()*1000);
-            sb.append(ohlcEntity.getTimeEpochTimestamp());
-            sb.append(",");
-            sb.append(dateFormat.format(time));
-            sb.append(",");
-            sb.append(++index);
-            sb.append(",");
-            sb.append(ohlcEntity.getClosingPrice());
-            sb.append(System.getProperty("line.separator"));
-        }
-
-        response.setContentType("text/plain; charset=utf-8");
-        response.getWriter().print(sb.toString());
-    }
 }
