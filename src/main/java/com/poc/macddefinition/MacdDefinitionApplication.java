@@ -71,8 +71,9 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 						.allowedOrigins("http://localhost:3000",
-								"http://localhost:5000",
-								"https://avergnaud.github.io");
+								"http://localhost:1313",
+								"https://avergnaud.github.io",
+								"https://macd-front.firebaseapp.com");
 			}
 		};
 	}
