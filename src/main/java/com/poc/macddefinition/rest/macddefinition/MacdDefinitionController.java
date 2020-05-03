@@ -21,11 +21,14 @@ public class MacdDefinitionController {
         return mapper.asMacdDefinition(macdDefinitionEntity);
     }
 
+    /*
+    TODO : sécuriser
     @PostMapping()
     public MacdDefinition create(@RequestBody MacdDefinition macdDefinition) {
         MacdDefinitionEntity macdDefinitionEntity = mapper.asMacdDefinitionEntity(macdDefinition);
         macdDefinitionEntity = macdDefinitionRepository.create(macdDefinitionEntity);
         return mapper.asMacdDefinition(macdDefinitionEntity);
     }
+     */
 
 }
