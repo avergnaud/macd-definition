@@ -47,7 +47,7 @@ public class MACDUpdater {
         this.macdDefinitionEntities.addAll(this.macdDefinitionRepository.getAll());
     }
 
-    @Scheduled(fixedDelay = 20_000)
+    @Scheduled(fixedDelay = 120_000)
     public void updateMacds() {
 
         if (this.macdDefinitionEntities.isEmpty()) {

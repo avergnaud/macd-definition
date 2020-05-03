@@ -68,7 +68,7 @@ public class OHLCUpdater {
     /**
      * call Kraken every @fixedDelay at most
      */
-    @Scheduled(fixedDelay = 20_000)
+    @Scheduled(fixedDelay = 120_000)
     public void callKraken() {
 
         if(this.macdDefinitionEntities.isEmpty()) {
