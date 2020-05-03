@@ -73,7 +73,8 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 						.allowedOrigins("http://localhost:3000",
 								"http://localhost:1313",
 								"https://avergnaud.github.io",
-								"https://macd-front.firebaseapp.com");
+								"https://macd-front.firebaseapp.com",
+								"https://macd-front.web.app");
 			}
 		};
 	}
