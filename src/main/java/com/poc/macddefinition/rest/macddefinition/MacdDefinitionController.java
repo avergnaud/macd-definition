@@ -6,6 +6,9 @@ import fr.xebia.extras.selma.Selma;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("macd-definitions")
 public class MacdDefinitionController {
@@ -19,6 +22,14 @@ public class MacdDefinitionController {
     public MacdDefinition getMacdDefinition(@PathVariable long id) {
         MacdDefinitionEntity macdDefinitionEntity = macdDefinitionRepository.get(id);
         return mapper.asMacdDefinition(macdDefinitionEntity);
+    }
+
+    @GetMapping(value = "/", produces = "application/json")
+    public List<MacdDefinition> getAll() {
+        List<MacdDefinitionEntity> macdDefinitionEntities = macdDefinitionRepository.getAll();
+        return macdDefinitionEntities.stream()
+                .map(mapper::asMacdDefinition)
+                .collect(Collectors.toList());
     }
 
     /*

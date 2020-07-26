@@ -72,6 +72,9 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 				registry.addMapping("/**")
 						.allowedOrigins("http://localhost:3000",
 								"http://localhost:1313",
+								"http://localhost:5000",
+								"http://localhost:8000",
+								"http://192.168.1.52:5000/",
 								"https://avergnaud.github.io",
 								"https://macd-front.firebaseapp.com",
 								"https://macd-front.web.app");
