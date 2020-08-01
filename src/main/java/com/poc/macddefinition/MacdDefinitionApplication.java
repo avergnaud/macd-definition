@@ -78,7 +78,8 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 								"https://avergnaud.github.io",
 								"https://macd-front.firebaseapp.com",
 								"https://macd-front.web.app",
-								"https://cat-fintech.herokuapp.com");
+								"https://cat-fintech.herokuapp.com",
+								"https://cat-fintech.netlify.app");
 			}
 		};
 	}
