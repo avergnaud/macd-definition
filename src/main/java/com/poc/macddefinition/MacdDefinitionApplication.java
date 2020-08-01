@@ -77,7 +77,8 @@ public class MacdDefinitionApplication implements CommandLineRunner {
 								"http://192.168.1.52:5000/",
 								"https://avergnaud.github.io",
 								"https://macd-front.firebaseapp.com",
-								"https://macd-front.web.app");
+								"https://macd-front.web.app",
+								"https://cat-fintech.herokuapp.com/");
 			}
 		};
 	}
